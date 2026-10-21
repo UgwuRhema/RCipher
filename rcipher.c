@@ -6,14 +6,19 @@ void func(uint8_t c);
 void encyrpt(const uint8_t *);
 void decrypt(uint32_t *);
 
-void
+#define MAX_LENGTH_OF_TXT 256
+
+int
 main(void)
 {
 	/*our formula is (num - 2), we convert a character*/
 	/*to it's respective ascii value the subtract 2 from it*/
 	printf("RCipher\n");
+	char buffer[MAX_LENGTH_OF_TXT];
 	printf("Enter text to encrypt to numbers: ");
-	return;
+	fgets(buffer, sizeof(buffer), stdin);
+	buffer[slen(buffer) - 1] = '\0';
+	return 0;
 }
 
 size_t
