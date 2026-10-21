@@ -26,7 +26,7 @@ slen(const uint8_t *str)
 }
 
 void
-func(char c)
+func(uint8_t c)
 {
 	int ascii_value = (int)c;
 	int res = ascii_value - 2;
