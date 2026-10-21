@@ -3,7 +3,7 @@
 
 size_t slen(const uint8_t *);
 void func(uint8_t c);
-void encyrpt(const uint8_t *);
+void encrypt(const uint8_t *);
 void decrypt(uint32_t *);
 
 #define MAX_LENGTH_OF_TXT 256
@@ -18,6 +18,7 @@ main(void)
 	printf("Enter text to encrypt to numbers: ");
 	fgets(buffer, sizeof(buffer), stdin);
 	buffer[slen(buffer) - 1] = '\0';
+	encrypt(buffer);
 	return 0;
 }
 
@@ -46,4 +47,5 @@ encrypt(const uint8_t *s)
 	{
 		func(s[i]);	
 	}
+	printf("\n");
 }
