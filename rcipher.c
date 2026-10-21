@@ -4,7 +4,7 @@
 size_t slen(const uint8_t *);
 void func(uint8_t c);
 void encrypt(const uint8_t *);
-void decrypt(uint32_t *);
+void decrypt(uint32_t);
 
 #define MAX_LENGTH_OF_TXT 256
 
@@ -15,7 +15,7 @@ main(void)
 	/*to it's respective ascii value the subtract 2 from it*/
 	printf("RCipher\n");
 	char buffer[MAX_LENGTH_OF_TXT];
-	printf("Enter text to encrypt to numbers: ");
+	printf("Enter text to encrypt to numbers(max 256 chars): ");
 	fgets(buffer, sizeof(buffer), stdin);
 	buffer[slen(buffer) - 1] = '\0';
 	encrypt(buffer);
@@ -34,9 +34,9 @@ slen(const uint8_t *str)
 void
 func(uint8_t c)
 {
-	int ascii_value = (int)c;
-	int res = ascii_value - 2;
-	printf("%d", res);
+	uint32_t ascii_value = (int)c;
+	uint32_t res = ascii_value - 2;
+	printf("%u", res);
 }
 
 void
@@ -49,3 +49,11 @@ encrypt(const uint8_t *s)
 	}
 	printf("\n");
 }
+
+void
+decrypt(uint32_t av)
+{
+	uint32_t correct_ascii = av + 2;
+	char c = (char)correct_ascii;
+	printf("%c", c);
+}/*basically the reverse of func(NOT encrypt in our case)*/
