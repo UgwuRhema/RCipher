@@ -25,6 +25,7 @@ main(void)
 	/*decrypt*/
 	for (size_t i=0;i<len;++i)
 		decrypt(ciphers[i]);
+	printf("\n");
 	return 0;
 }
 
