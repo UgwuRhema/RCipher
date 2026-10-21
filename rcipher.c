@@ -2,8 +2,8 @@
 #include <stdint.h>
 
 size_t slen(const uint8_t *);
-void func(uint8_t c);
-void encrypt(const uint8_t *);
+int func(uint8_t c);
+void encrypt(const uint8_t *, int *);
 void decrypt(uint32_t);
 
 #define MAX_LENGTH_OF_TXT 256
@@ -14,11 +14,12 @@ main(void)
 	/*our formula is (num - 2), we convert a character*/
 	/*to it's respective ascii value the subtract 2 from it*/
 	printf("RCipher\n");
-	char buffer[MAX_LENGTH_OF_TXT];
+	char buffer[MAX_LENGTH_OF_TXT];/*for characters*/
+	uint32_t ciphers[MAX_LENGTH_OF_TXT];/*for ciphers*/
 	printf("Enter text to encrypt to numbers(max 256 chars): ");
 	fgets(buffer, sizeof(buffer), stdin);
 	buffer[slen(buffer) - 1] = '\0';
-	encrypt(buffer);
+	encrypt(buffer, ciphers);
 	return 0;
 }
 
@@ -31,21 +32,21 @@ slen(const uint8_t *str)
 	return len;
 }
 
-void
+int
 func(uint8_t c)
 {
 	uint32_t ascii_value = (int)c;
 	uint32_t res = ascii_value - 2;
-	printf("%u", res);
+	return res;
 }
 
 void
-encrypt(const uint8_t *s)
+encrypt(const uint8_t *s, int *arr)
 {
 	/*for now this will just print our number to the screen*/
 	for (size_t i=0;i<slen(s);++i)
 	{
-		func(s[i]);	
+		arr[i] = func(s[i]);	
 	}
 	printf("\n");
 }
