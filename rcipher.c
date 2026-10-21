@@ -3,7 +3,7 @@
 void
 main(void)
 {
-	int a = 919293;
-	printf("%s\n", a);
+	int a[3] = {91,92,93};
+	printf("%s\n", (char *)a);
 	return;
 }
