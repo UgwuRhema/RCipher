@@ -22,6 +22,9 @@ main(void)
 	size_t len = slen(buffer);
 	encrypt(buffer, ciphers);
 	printf("Length: %zu\n", len);
+	/*decrypt*/
+	for (size_t i=0;i<len;++i)
+		decrypt(ciphers[i]);
 	return 0;
 }
 
