@@ -3,7 +3,6 @@
 #include <string.h>
 
 static size_t slen(const uint8_t *);
-static int func(const uint8_t c);
 void encrypt(const uint8_t *, uint32_t *, FILE *);
 void decrypt(uint32_t *, size_t);
 
@@ -66,21 +65,13 @@ slen(const uint8_t *str)
 	return len;
 }
 
-static int
-func(const uint8_t c)
-{
-	uint32_t ascii_value = (int)c;
-	uint32_t res = ascii_value - 2;
-	return res;
-}
-
 void
 encrypt(const uint8_t *s, uint32_t *arr, FILE *f)
 {
 	/*for now this will just print our number to the screen*/
 	for (size_t i=0;i<slen(s);++i)
 	{
-		arr[i] = func(s[i]);
+		arr[i] = (uint8_t)((s[i] - 2) & 0xff);
 		fprintf(f, "%d", arr[i]);
 	}
 	fprintf(f, "\n");
