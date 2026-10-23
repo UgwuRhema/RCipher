@@ -72,7 +72,7 @@ encrypt(const uint8_t *s, uint32_t *arr, size_t len, FILE *f)
 	for (size_t i=0;i<len;++i)
 	{
 		arr[i] = (uint8_t)((s[i] - 2) & 0xff);
-		fprintf(f, "%d", arr[i]);
+		fprintf(f, "%d-", arr[i]);
 	}
 	fprintf(f, "\n");
 }
