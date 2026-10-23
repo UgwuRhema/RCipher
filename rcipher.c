@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
 
 static size_t slen(const uint8_t *);
 int encrypt(const uint8_t *, uint32_t *, size_t, FILE *);
@@ -18,8 +19,8 @@ main(int argc, char *argv[])
 	}
 	/*storage*/
 	const char *filename;
-	char txt_buffer[MAX_LEN];
-	int cipher_buffer[MAX_LEN];
+	uint8_t txt_buffer[MAX_LEN];
+	uint32_t cipher_buffer[MAX_LEN];
 	if (argv[1])
 	{
 		if (strcmp(argv[1], "-o") == 0)
@@ -38,7 +39,12 @@ main(int argc, char *argv[])
 				return 1;
 			}
 			printf("Enter TXT(max chars 256): ");
-			fgets(txt_buffer, sizeof(txt_buffer), stdin);
+			if (!fgets(txt_buffer, sizeof(txt_buffer), stdin))
+			{
+				fprintf(stderr, "RCipher: Failed to read input from the standard input stream\n");
+				fclose(fd);
+				return 1;
+			}
 			txt_buffer[slen(txt_buffer) - 1] = '\0';
 			size_t len = slen(txt_buffer);
 			printf("Length of input: %zu\n", len);
@@ -67,7 +73,26 @@ main(int argc, char *argv[])
 				fprintf(stderr, "RCipher: File '%s' does not exist\n", filename);
 				return 1;
 			}
+			char line[4 * MAX_LEN + 2];/*what is this?*/
+			if (!fgets(line, sizeof(line), fd))
+			{
+				fprintf(stderr, "RCipher: Empty or Unreadable file\n");
+				fclose(fd);
+				return 1;
+			}
+			printf("Gotten Cipher text: %s\n", line);
 			fclose(fd);
+			size_t n = 0;
+			printf("Decryption:\n");
+			for (char *tok = strtok(line, ".\n"); tok && n < MAX_LEN; strtok(NULL, ".\n"))
+				cipher_buffer[n++] = strtoul(tok, NULL, 10);
+			int d = decrypt((uint32_t *)cipher_buffer, n);
+			if (d < 0)
+				return 1;
+			putchar('\n');
+		} else {
+			fprintf(stderr, "RCipher: Unknow command\n");
+			return 1;
 		}
 	}
 	return 0;
