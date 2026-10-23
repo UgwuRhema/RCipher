@@ -5,7 +5,7 @@
 static size_t slen(const uint8_t *);
 static int func(const uint8_t c);
 void encrypt(const uint8_t *, uint32_t *, FILE *);
-void decrypt(uint32_t);
+void decrypt(uint32_t *, size_t);
 
 #define MAX_LEN 256
 
@@ -87,9 +87,13 @@ encrypt(const uint8_t *s, uint32_t *arr, FILE *f)
 }
 
 void
-decrypt(uint32_t av)
+decrypt(uint32_t *a, size_t len)
 {
-	uint32_t correct_ascii = av + 2;
-	char c = (char)correct_ascii;
-	printf("%c", c);
+	for (size_t i=0;i<len;++i)
+	{
+		uint32_t curr = a[i];
+		uint32_t correct = curr + 2;
+		char c = (char)correct;
+		printf("%c", c);
+	}
 }/*basically the reverse of func(NOT encrypt in our case)*/
