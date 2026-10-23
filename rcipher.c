@@ -35,7 +35,7 @@ main(int argc, char *argv[])
 			FILE *fd = fopen(filename, "w");
 			printf("Enter TXT(max chars 256): ");
 			fgets(txt_buffer, sizeof(txt_buffer), stdin);
-			txt_buffer[slen(txt_buffer)] = '\0';
+			txt_buffer[slen(txt_buffer) - 1] = '\0';
 			size_t len = slen(txt_buffer);
 			printf("Length of input: %zu\n", len);
 			fclose(fd);
