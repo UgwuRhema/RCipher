@@ -90,6 +90,14 @@ main(int argc, char *argv[])
 			if (d < 0)
 				return 1;
 			putchar('\n');
+		} else if (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0){
+			printf("RCipher\n");
+			printf("Usage: rcipher [options] <file>\n");
+			printf("Options:\n");
+			printf("\t-o <filename>: To Create a new Cipher\n");
+			printf("\t-d <filename>: To Decrypt a Cipher found inside a file\n");
+			printf("\t--help or -h: Display this message\n");
+			return 0;
 		} else {
 			fprintf(stderr, "RCipher: Unknow command\n");
 			return 1;
