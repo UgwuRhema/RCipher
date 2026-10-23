@@ -24,8 +24,18 @@ main(int argc, char *argv[])
 		{
 			if (argc > 2 && argv[2])
 				filename = strdup(argv[2]);
+			else {
+				fprintf(stderr, "RCipher: Output file cannot be empty\n");
+				return 1;
+			}
+
+			FILE *fd = fopen(filename, "w");
+			fclose(fd);
 		}
 	}
+
+	FILE *fd = fopen(filename, "w");
+	fclose(fd);
 }
 
 size_t
