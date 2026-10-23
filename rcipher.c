@@ -17,11 +17,10 @@ main(int argc, char *argv[])
 		fprintf(stderr, "RCipher: Needs output file to store Cipher\n");
 		return 1;
 	}
-	if (argc > 2 && argv[2])
-	{
-		if (strcmp(argv[2], "-o") == 0)
-			printf("OUTPUT!\n");
-	}
+
+	if (argv[1])
+		if (strcmp(argv[1], "-o") == 0)
+			printf("Output\n");
 }
 
 size_t
