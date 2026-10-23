@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 
 size_t slen(const uint8_t *);
 int func(uint8_t c);
@@ -9,24 +10,18 @@ void decrypt(uint32_t);
 #define MAX_LENGTH_OF_TXT 256
 
 int
-main(void)
+main(int argc, char *argv[])
 {
-	/*our formula is (num - 2), we convert a character*/
-	/*to it's respective ascii value the subtract 2 from it*/
-	printf("RCipher\n");
-	char buffer[MAX_LENGTH_OF_TXT];/*for characters*/
-	uint32_t ciphers[MAX_LENGTH_OF_TXT];/*for ciphers*/
-	printf("Enter text to encrypt to numbers(max 256 chars): ");
-	fgets(buffer, sizeof(buffer), stdin);
-	buffer[slen(buffer) - 1] = '\0';
-	size_t len = slen(buffer);
-	encrypt(buffer, ciphers);
-	printf("Length: %zu\n", len);
-	/*decrypt*/
-	for (size_t i=0;i<len;++i)
-		decrypt(ciphers[i]);
-	printf("\n");
-	return 0;
+	if (argc < 2)
+	{
+		fprintf(stderr, "RCipher: Needs output file to store Cipher\n");
+		return 1;
+	}
+	if (argc > 2 && argv[2])
+	{
+		if (strcmp(argv[2], "-o") == 0)
+			printf("OUTPUT!\n");
+	}
 }
 
 size_t
