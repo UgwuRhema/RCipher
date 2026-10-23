@@ -41,6 +41,18 @@ main(int argc, char *argv[])
 			encrypt(txt_buffer, cipher_buffer, fd);
 			printf("Encryption successful, Cipher written to %s\n", filename);
 			fclose(fd);
+		} else if (strcmp(argv[1], "-d") == 0){
+			/*this is decryption*/
+			if (argc > 2 && argv[2])
+				filename = strdup(argv[2]);
+			else {
+				fprintf(stderr, "RCipher: Please provide the file to Decipher\n");
+				return 1;
+			}
+			/*we read the file but for nothing i guess*/
+			/*let's use a cheap trick since the cipher_buffer is in a higher scope*/
+			FILE *fd = fopen(filename, "r");
+			fclose(fd);
 		}
 	}
 }
