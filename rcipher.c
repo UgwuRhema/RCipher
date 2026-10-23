@@ -4,7 +4,7 @@
 
 static size_t slen(const uint8_t *);
 static int func(const uint8_t c);
-void encrypt(const uint8_t *, uint32_t *);
+void encrypt(const uint8_t *, uint32_t *, FILE *);
 void decrypt(uint32_t);
 
 #define MAX_LEN 256
@@ -38,12 +38,11 @@ main(int argc, char *argv[])
 			txt_buffer[slen(txt_buffer) - 1] = '\0';
 			size_t len = slen(txt_buffer);
 			printf("Length of input: %zu\n", len);
+			encrypt(txt_buffer, cipher_buffer, fd);
+			printf("Encryption successful, Cipher written to %s\n", filename);
 			fclose(fd);
 		}
 	}
-
-	FILE *fd = fopen(filename, "w");
-	fclose(fd);
 }
 
 static size_t
@@ -64,15 +63,15 @@ func(const uint8_t c)
 }
 
 void
-encrypt(const uint8_t *s, uint32_t *arr)
+encrypt(const uint8_t *s, uint32_t *arr, FILE *f)
 {
 	/*for now this will just print our number to the screen*/
 	for (size_t i=0;i<slen(s);++i)
 	{
-		arr[i] = func(s[i]);	
-		printf("%u", arr[i]);
+		arr[i] = func(s[i]);
+		fprintf(f, "%d", arr[i]);
 	}
-	printf("\n");
+	fprintf(f, "\n");
 }
 
 void
