@@ -2,12 +2,12 @@
 #include <stdint.h>
 #include <string.h>
 
-size_t slen(const uint8_t *);
-int func(uint8_t c);
+static size_t slen(const uint8_t *);
+static int func(const uint8_t c);
 void encrypt(const uint8_t *, uint32_t *);
 void decrypt(uint32_t);
 
-#define MAX_LENGTH_OF_TXT 256
+#define MAX_LEN 256
 
 int
 main(int argc, char *argv[])
@@ -17,7 +17,10 @@ main(int argc, char *argv[])
 		fprintf(stderr, "RCipher: Needs output file to store Cipher\n");
 		return 1;
 	}
+	/*storage*/
 	const char *filename;
+	char txt_buffer[MAX_LEN];
+	int cipher_buffer[MAX_LEN];
 	if (argv[1])
 	{
 		if (strcmp(argv[1], "-o") == 0)
@@ -28,8 +31,13 @@ main(int argc, char *argv[])
 				fprintf(stderr, "RCipher: Output file cannot be empty\n");
 				return 1;
 			}
-
+			/*we encrypt in the '-o' flag and decrpyt in the '-d' flag*/
 			FILE *fd = fopen(filename, "w");
+			printf("Enter TXT(max chars 256): ");
+			fgets(txt_buffer, sizeof(txt_buffer), stdin);
+			txt_buffer[slen(txt_buffer)] = '\0';
+			size_t len = slen(txt_buffer);
+			printf("Length of input: %zu\n", len);
 			fclose(fd);
 		}
 	}
@@ -38,7 +46,7 @@ main(int argc, char *argv[])
 	fclose(fd);
 }
 
-size_t
+static size_t
 slen(const uint8_t *str)
 {
 	size_t len = 0;
@@ -47,8 +55,8 @@ slen(const uint8_t *str)
 	return len;
 }
 
-int
-func(uint8_t c)
+static int
+func(const uint8_t c)
 {
 	uint32_t ascii_value = (int)c;
 	uint32_t res = ascii_value - 2;
