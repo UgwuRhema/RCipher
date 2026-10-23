@@ -3,7 +3,7 @@
 #include <string.h>
 
 static size_t slen(const uint8_t *);
-void encrypt(const uint8_t *, uint32_t *, FILE *);
+void encrypt(const uint8_t *, uint32_t *, size_t, FILE *);
 void decrypt(uint32_t *, size_t);
 
 #define MAX_LEN 256
@@ -37,7 +37,7 @@ main(int argc, char *argv[])
 			txt_buffer[slen(txt_buffer) - 1] = '\0';
 			size_t len = slen(txt_buffer);
 			printf("Length of input: %zu\n", len);
-			encrypt(txt_buffer, cipher_buffer, fd);
+			encrypt(txt_buffer, cipher_buffer, len, fd);
 			printf("Encryption successful, Cipher written to %s\n", filename);
 			fclose(fd);
 		} else if (strcmp(argv[1], "-d") == 0){
@@ -66,10 +66,10 @@ slen(const uint8_t *str)
 }
 
 void
-encrypt(const uint8_t *s, uint32_t *arr, FILE *f)
+encrypt(const uint8_t *s, uint32_t *arr, size_t len, FILE *f)
 {
 	/*for now this will just print our number to the screen*/
-	for (size_t i=0;i<slen(s);++i)
+	for (size_t i=0;i<len;++i)
 	{
 		arr[i] = (uint8_t)((s[i] - 2) & 0xff);
 		fprintf(f, "%d", arr[i]);
