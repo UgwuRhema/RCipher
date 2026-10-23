@@ -3,8 +3,8 @@
 #include <string.h>
 
 static size_t slen(const uint8_t *);
-void encrypt(const uint8_t *, uint32_t *, size_t, FILE *);
-void decrypt(uint32_t *, size_t);
+int encrypt(const uint8_t *, uint32_t *, size_t, FILE *);
+int decrypt(uint32_t *, size_t);
 
 #define MAX_LEN 256
 
@@ -32,14 +32,25 @@ main(int argc, char *argv[])
 			}
 			/*we encrypt in the '-o' flag and decrpyt in the '-d' flag*/
 			FILE *fd = fopen(filename, "w");
+			if (!fd)
+			{
+				fprintf(stderr, "RCipher: Could not open file '%s'\n", filename);
+				return 1;
+			}
 			printf("Enter TXT(max chars 256): ");
 			fgets(txt_buffer, sizeof(txt_buffer), stdin);
 			txt_buffer[slen(txt_buffer) - 1] = '\0';
 			size_t len = slen(txt_buffer);
 			printf("Length of input: %zu\n", len);
-			encrypt(txt_buffer, cipher_buffer, len, fd);
+			int e = encrypt(txt_buffer, cipher_buffer, len, fd);
+			if (e < 0)
+			{
+				fprintf(stderr, "RCipher: Encrypt failed\n");
+				return 1;
+			}
 			printf("Encryption successful, Cipher written to %s\n", filename);
 			fclose(fd);
+			return 0;
 		} else if (strcmp(argv[1], "-d") == 0){
 			/*this is decryption*/
 			if (argc > 2 && argv[2])
@@ -51,9 +62,15 @@ main(int argc, char *argv[])
 			/*we read the file but for nothing i guess*/
 			/*let's use a cheap trick since the cipher_buffer is in a higher scope*/
 			FILE *fd = fopen(filename, "r");
+			if (!fd)
+			{
+				fprintf(stderr, "RCipher: File '%s' does not exist\n", filename);
+				return 1;
+			}
 			fclose(fd);
 		}
 	}
+	return 0;
 }
 
 static size_t
@@ -65,21 +82,26 @@ slen(const uint8_t *str)
 	return len;
 }
 
-void
+int
 encrypt(const uint8_t *s, uint32_t *arr, size_t len, FILE *f)
 {
+	if (!s || !arr || !f)
+		return -1;
 	/*for now this will just print our number to the screen*/
 	for (size_t i=0;i<len;++i)
 	{
 		arr[i] = (uint8_t)((s[i] - 2) & 0xff);
-		fprintf(f, "%d-", arr[i]);
+		fprintf(f, "%d.", arr[i]);
 	}
 	fprintf(f, "\n");
+	return 0;/*success*/
 }
 
-void
+int
 decrypt(uint32_t *a, size_t len)
 {
+	if (!a)
+		return -1;
 	for (size_t i=0;i<len;++i)
 	{
 		uint32_t curr = a[i];
@@ -87,4 +109,5 @@ decrypt(uint32_t *a, size_t len)
 		char c = (char)correct;
 		printf("%c", c);
 	}
+	return 0;
 }/*basically the reverse of func(NOT encrypt in our case)*/
