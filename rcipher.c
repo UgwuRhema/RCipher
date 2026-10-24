@@ -26,7 +26,7 @@ main(int argc, char *argv[])
 		if (strcmp(argv[1], "-o") == 0)
 		{
 			if (argc > 2 && argv[2])
-				filename = strdup(argv[2]);
+				filename = argv[2];
 			else {
 				fprintf(stderr, "RCipher: Output file cannot be empty\n");
 				return 1;
@@ -60,7 +60,7 @@ main(int argc, char *argv[])
 		} else if (strcmp(argv[1], "-d") == 0){
 			/*this is decryption*/
 			if (argc > 2 && argv[2])
-				filename = strdup(argv[2]);
+				filename = argv[2];
 			else {
 				fprintf(stderr, "RCipher: Please provide the file to Decipher\n");
 				return 1;
@@ -80,11 +80,11 @@ main(int argc, char *argv[])
 				fclose(fd);
 				return 1;
 			}
-			printf("Gotten Cipher text: %s\n", line);
+			printf("Gotten Cipher text: %s", line);
 			fclose(fd);
 			size_t n = 0;
 			printf("Decryption:\n");
-			for (char *tok = strtok(line, ".\n"); tok && n < MAX_LEN; strtok(NULL, ".\n"))
+			for (char *tok = strtok(line, ".\n"); tok && n < MAX_LEN; tok = strtok(NULL, ".\n"))
 				cipher_buffer[n++] = strtoul(tok, NULL, 10);
 			int d = decrypt((uint32_t *)cipher_buffer, n);
 			if (d < 0)
@@ -138,8 +138,7 @@ decrypt(uint32_t *a, size_t len)
 	for (size_t i=0;i<len;++i)
 	{
 		uint32_t curr = a[i];
-		uint32_t correct = curr + 2;
-		char c = (char)correct;
+		char c = (char)((curr + 2) & 0xff);
 		printf("%c", c);
 	}
 	return 0;
